@@ -1,0 +1,22 @@
+<%= form_tag '/boss_lady/factories' do %>
+    <ul>
+    <% @factories.each do |factory| %>
+        <li>
+          <label>
+            <%= check_box_tag "factories[#{factory.name}][]", '' %>
+            <%= factory.name %>
+          </label>
+          <ul>
+              <% factory.defined_traits.each do |trait| %>
+                <li>
+                  <%= check_box_tag "factories[#{factory.name}][]", trait.name %>
+                  <%= trait.name %>
+                </li>
+              <% end %>
+          </ul>
+        </li>
+    <% end %>
+    </ul>
+
+    <%= submit_tag %>
+<% end %>
