@@ -2,7 +2,6 @@ require_relative '../../../spec/spec_helper'
 
 module BossLady
   RSpec.describe FactoriesController, type: :controller do
-
     routes { BossLady::Engine.routes }
 
     describe '#index' do
@@ -43,6 +42,17 @@ module BossLady
         created_factories = assigns(:created_factories)
         expect(created_factories['computer'][:traits]).to be_empty
         expect(created_factories['computer'][:instances].size).to eq(1)
+      end
+
+      it 'renders index to show all the selected traits when there are overlapping values used in traits' do
+        params = {factories: {computer: %w(ram_size_16gb ram_size_32gb)}}
+        post :create, params
+
+        expect(response).to render_template(:index)
+        expect(assigns(:created_factories)['computer'][:overlapping_attributes]).to eq({ram_size: {
+                                                                                           values: [16_192, 32_384],
+                                                                                           traits: [:ram_size_16gb, :ram_size_32gb],
+                                                                                       }})
       end
     end
   end
