@@ -1,4 +1,4 @@
-require_dependency "boss_lady/application_controller"
+require_dependency 'boss_lady/application_controller'
 
 module BossLady
   class FactoriesController < ApplicationController

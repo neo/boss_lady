@@ -6,7 +6,7 @@ require 'action_mailer/railtie'
 require 'sprockets/railtie'
 
 Bundler.require(*Rails.groups)
-require "boss_lady"
+require 'boss_lady'
 
 module Dummy
   class Application < Rails::Application
