@@ -108,7 +108,7 @@ PLATFORMS
 
 DEPENDENCIES
   boss_lady!
-  factory_girl_rails
+  factory_girl_rails (~> 4.0)
   pry
-  rspec-rails
+  rspec-rails (~> 3)
   sqlite3
