@@ -45,7 +45,5 @@ FactoryGirl.define do
     trait :graphics_card_nvidia do
       graphics_card 'NVIDIA GeForce GTX 775M'
     end
-
   end
-
 end

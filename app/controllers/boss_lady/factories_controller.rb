@@ -7,13 +7,16 @@ module BossLady
     end
 
     def create
-      require 'pry'
-      params['factories'].each do |(factory_name, traits_array)|
-        traits = traits_array.reject(&:blank?).map(&:to_sym)
-        FactoryGirl.create(factory_name, *traits)
-      end
+       @created_factories = {}
+       params['factories'].each do |(factory_name, traits_array)|
+         traits = traits_array.reject(&:blank?).map(&:to_sym)
+         @created_factories[factory_name] ||= {
+            traits: traits,
+            instances: [],
+        }
 
-      render text: 'well done'
+        @created_factories[factory_name][:instances] << FactoryGirl.create(factory_name, *traits)
+      end
     end
   end
 end

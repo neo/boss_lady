@@ -18,8 +18,9 @@ module BossLady
     end
 
     describe '#create' do
+      let(:params) { {factories: {computer: ['']}} }
+
       it 'creates the model from the specified factory' do
-        params = { factories: { computer: [""] }}
         expect {
           post :create, params
         }.to change { Computer.count }
@@ -28,12 +29,20 @@ module BossLady
       end
 
       it 'creates the model from the specified factory with traits' do
-        params = { factories: { computer: ['without_ssd']} }
+        params = {factories: {computer: ['without_ssd']}}
         expect {
           post :create, params
         }.to change { Computer.count }
         expect(response).to have_http_status(:ok)
         expect(Computer.last.ssd).to eq(false)
+      end
+
+      it 'has all the newly created factory instances available for the view' do
+        post :create, params
+
+        created_factories = assigns(:created_factories)
+        expect(created_factories['computer'][:traits]).to be_empty
+        expect(created_factories['computer'][:instances].size).to eq(1)
       end
     end
   end

@@ -1,0 +1,11 @@
+<h1>Created new instances</h1>
+
+<% @created_factories.each do |(factory_type, factory)| %>
+    <h2><%= factory_type %></h2>
+    <h3>Traits: <%= factory[:traits].join ', ' %></h3>
+    <ul>
+      <% factory[:instances].each do |instance| %>
+          <li><%= instance.id %> (<%= instance.inspect %>)</li>
+      <% end %>
+    </ul>
+<% end %>
