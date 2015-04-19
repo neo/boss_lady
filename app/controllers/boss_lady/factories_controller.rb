@@ -10,7 +10,7 @@ module BossLady
     def create
       @form = FactoriesForm.new params
 
-      if @form.overlapping_values
+      unless @form.valid?
         index
         render :index
       end
