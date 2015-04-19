@@ -29,4 +29,7 @@ Dummy::Application.configure do
 
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
+
+  # Since a core part of the logic is in the lib directory, for now, the plugins needs to be reloaded on every request
+  config.reload_plugins = true
 end

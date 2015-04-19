@@ -39,7 +39,7 @@ module BossLady
       it 'has all the newly created factory instances available for the view' do
         post :create, params
 
-        created_factories = assigns(:created_factories)
+        created_factories = assigns(:form).created_factories
         expect(created_factories['computer'][:traits]).to be_empty
         expect(created_factories['computer'][:instances].size).to eq(1)
       end
@@ -49,10 +49,10 @@ module BossLady
         post :create, params
 
         expect(response).to render_template(:index)
-        expect(assigns(:created_factories)['computer'][:overlapping_attributes]).to eq({ram_size: {
-                                                                                           values: [16_192, 32_384],
-                                                                                           traits: [:ram_size_16gb, :ram_size_32gb],
-                                                                                       }})
+        expect(assigns(:form).created_factories['computer'][:overlapping_attributes]).to eq({ram_size: {
+                                                                                                values: [16_192, 32_384],
+                                                                                                traits: [:ram_size_16gb, :ram_size_32gb],
+                                                                                            }})
       end
     end
   end

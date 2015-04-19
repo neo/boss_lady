@@ -1,8 +1,8 @@
 = form_tag '/boss_lady/factories' do
-  - if @overlapping_values
+  - if @form.overlapping_values
     h1 Overlapping values found
     p
-      - @created_factories.each do |(factory, attrs)|
+      - @form.created_factories.each do |(factory, attrs)|
         - attrs[:overlapping_attributes].each do |(attribute_name, attr)|
           = attribute_name + ' => ' + (attr[:traits].join ', ')
 
