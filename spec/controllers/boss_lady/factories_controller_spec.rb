@@ -14,6 +14,11 @@ module BossLady
         get :index
         expect(assigns(:factories)).to_not be_nil
       end
+
+      it 'renders in json format' do
+        get :index, format: 'json'
+        expect(response.body).to eq(Factory.all.to_json)
+      end
     end
 
     describe '#create' do

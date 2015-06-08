@@ -30,7 +30,6 @@ module BossLady
       end
     end
 
-
     def valid?
       @valid
     end

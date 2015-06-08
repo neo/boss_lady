@@ -10,14 +10,14 @@
     - @factories.each do |factory|
       li
         label
-          = check_box_tag "factories[#{factory.name}][]", '', factory_to_be_created?(factory.name)
-          = factory.name
+          = check_box_tag "factories[#{factory[:name]}][]", '', factory_to_be_created?(factory[:name])
+          = factory[:name]
 
           ul
-            - factory.defined_traits.each do |trait|
+            - factory[:traits].each do |trait|
               li
                 label
-                  = check_box_tag "factories[#{factory.name}][]", trait.name, trait_to_be_created?(factory.name, trait.name)
-                  = trait.name
+                  = check_box_tag "factories[#{factory[:name]}][]", trait, trait_to_be_created?(factory[:name], trait)
+                  = trait
 
     = submit_tag
