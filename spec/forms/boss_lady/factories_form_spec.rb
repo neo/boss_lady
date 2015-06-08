@@ -1,4 +1,4 @@
-require_relative '../../spec/spec_helper'
+require_relative '../../../spec/spec_helper'
 
 module BossLady
   RSpec.describe FactoriesForm do
