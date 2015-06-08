@@ -22,22 +22,31 @@ module BossLady
     end
 
     describe '#create' do
-      let(:params) { {factories: {computer: ['']}} }
+      let(:params) { {factories: {computer: { traits:  [] } }} }
 
       it 'creates the model from the specified factory' do
         expect {
           post :create, params
         }.to change { Computer.count }
         expect(response).to have_http_status(:ok)
-
       end
 
       it 'creates the model from the specified factory with traits' do
-        params = {factories: {computer: ['without_ssd']}}
+        params = {factories: {computer: {traits: ['without_ssd']}}}
         expect {
           post :create, params
         }.to change { Computer.count }
         expect(response).to have_http_status(:ok)
+        expect(Computer.last.ssd).to eq(false)
+      end
+
+      it 'creates the model from a json' do
+        params = { factories: {computer: {traits: ['without_ssd']}} }
+        expect {
+          post :create, params.to_json, format: 'json'
+        }.to change { Computer.count }
+        expect(response).to have_http_status(:ok)
+        expect(JSON.parse(response.body)).to include('created_factories', 'valid', 'errors', 'overlapping_values')
         expect(Computer.last.ssd).to eq(false)
       end
 
@@ -50,7 +59,7 @@ module BossLady
       end
 
       it 'renders index to show all the selected traits when there are overlapping values used in traits' do
-        params = {factories: {computer: %w(ram_size_16gb ram_size_32gb)}}
+        params = {factories: {computer: { traits: %w(ram_size_16gb ram_size_32gb)} }}
         post :create, params
 
         expect(response).to render_template(:index)

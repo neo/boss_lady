@@ -2,7 +2,7 @@ require_relative '../../../spec/spec_helper'
 
 module BossLady
   RSpec.describe FactoriesForm do
-    let(:params) { ActiveSupport::HashWithIndifferentAccess.new({'factories' => {factory => traits}}) }
+    let(:params) { ActiveSupport::HashWithIndifferentAccess.new({'factories' => {factory => {'traits' => traits}}}) }
     let(:factory) { 'computer' }
     let(:traits) { [] }
     subject { FactoriesForm.new params }

@@ -21,6 +21,7 @@ module BossLady
           next
         end
 
+        traits_array = traits_array[:traits] if traits_array.has_key? :traits
         traits = traits_array.reject(&:blank?).map(&:to_sym)
         next if invalid_traits?(factory_class, traits)
         factory = factories_for(factory_name, traits)
