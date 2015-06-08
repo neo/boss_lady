@@ -13,7 +13,7 @@ module BossLady
     end
 
     def create
-      @form = FactoriesForm.new(request.format.json? ? JSON.parse(request.raw_post).with_indifferent_access : params)
+      @form = FactoriesForm.create(request.format.json? ? JSON.parse(request.raw_post).with_indifferent_access : params)
 
       return render :index unless @form.valid?
 

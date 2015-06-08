@@ -3,6 +3,10 @@ module BossLady
     attr_reader :created_factories
     attr_reader :errors
 
+    def self.create(params)
+      new params
+    end
+
     def initialize(params)
       @created_factories = {}
       @valid = true

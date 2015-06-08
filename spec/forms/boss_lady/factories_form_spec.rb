@@ -5,7 +5,15 @@ module BossLady
     let(:params) { ActiveSupport::HashWithIndifferentAccess.new({'factories' => {factory => {'traits' => traits}}}) }
     let(:factory) { 'computer' }
     let(:traits) { [] }
-    subject { FactoriesForm.new params }
+    subject { FactoriesForm.create params }
+
+    context '.create' do
+      it 'behaves just like .new' do
+        expect(FactoriesForm).to receive(:new)
+
+        FactoriesForm.create params
+      end
+    end
 
     context 'empty params' do
       let(:params) { {} }
