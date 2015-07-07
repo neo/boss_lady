@@ -1,0 +1,19 @@
+= form_tag '/boss_lady/factories' do
+  - @form.created_factories.each do |(factory_type, factory)|
+    h2= factory_type
+    h3
+      ' Traits:
+      = factory[:traits].join ', '
+    - factory[:traits].each do |trait|
+      = hidden_field_tag "factories[#{factory_type}][traits][]", trait
+
+    ul
+      - factory[:instances].each do |instance|
+
+        - instance.attributes.keys.each do |attribute_key|
+          li
+            = "(#{attribute_key})"
+            = text_field_tag "factories[#{factory_type}][attributes][#{attribute_key}]", "#{instance[attribute_key]}"
+
+
+  = submit_tag
