@@ -3,6 +3,7 @@ require_relative '../../../spec/spec_helper'
 module BossLady
   RSpec.describe FactoriesController, type: :controller do
     routes { BossLady::Engine.routes }
+    render_views
 
     describe '#index' do
       it 'renders index' do
@@ -62,7 +63,7 @@ module BossLady
         params = {factories: {computer: { traits: %w(ram_size_16gb ram_size_32gb)} }}
         post :create, params
 
-        expect(response).to render_template(:index)
+        expect(response).to have_rendered(:index)
         expect(assigns(:form).created_factories['computer'][:overlapping_attributes]).to eq({ram_size: {
                                                                                                 values: [16_192, 32_384],
                                                                                                 traits: [:ram_size_16gb, :ram_size_32gb],
