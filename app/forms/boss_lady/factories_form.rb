@@ -4,10 +4,17 @@ module BossLady
     attr_reader :errors
 
     def self.create(params)
-      new params
+      new params, :create
     end
 
-    def initialize(params)
+    def self.build(params)
+      new params, :build
+    end
+
+    def initialize(params, build_type = :create)
+      raise ArgumentError, "build_type is not 'build' or 'create', provided: '#{build_type}'" unless [:create, :build].include? build_type
+      @build_type = build_type
+
       @created_factories = {}
       @valid = true
       @overlapping_values = false
@@ -31,7 +38,7 @@ module BossLady
         check_for_overlapping_attributes(factory_class, factory, traits)
 
         attributes = params[:attributes] || {}
-        factory[:instances] << FactoryGirl.create(factory_name, *traits, attributes) if valid?
+        factory[:instances] << FactoryGirl.send(@build_type, factory_name, *traits, attributes) if valid?
       end
     end
 

@@ -10,10 +10,43 @@ module BossLady
     subject { FactoriesForm.create params }
 
     context '.create' do
-      it 'behaves just like .new' do
-        expect(FactoriesForm).to receive(:new)
-
+      it 'sets the build_type to :create' do
+        expect(FactoriesForm).to receive(:new).with(params, :create)
         FactoriesForm.create params
+      end
+
+      it 'creates the object' do
+        expect { FactoriesForm.create params }.to change { Computer.count }
+      end
+    end
+
+    context '.build' do
+      it 'sets the build_type to :build' do
+        expect(FactoriesForm).to receive(:new).with(params, :build)
+        FactoriesForm.build params
+      end
+
+      it 'does not create the object' do
+        expect { FactoriesForm.build params }.not_to change { Computer.count }
+      end
+    end
+
+    context '.new' do
+      context 'invalid build_type' do
+        it 'raises ArgumentError' do
+          expect { FactoriesForm.new params, :invalid }.to raise_exception(ArgumentError, /build_type is not/)
+        end
+      end
+
+      context 'valid build_type' do
+        it 'does not raise for :build or :create build types' do
+          expect { FactoriesForm.new params, :build  }.to_not raise_exception
+          expect { FactoriesForm.new params, :create }.to_not raise_exception
+        end
+      end
+
+      it 'defaults the build type to :create' do
+        expect { FactoriesForm.new params }.to change { Computer.count }
       end
     end
 
