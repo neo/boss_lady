@@ -16,8 +16,8 @@ module BossLady
       process params if params[:factories]
     end
 
-    def process(params)
-      params[:factories].each do |(factory_name, traits_array)|
+    def process(form_params)
+      form_params[:factories].each do |(factory_name, params)|
         begin
           factory_class = FactoryGirl.factory_by_name(factory_name)
         rescue ArgumentError
@@ -25,13 +25,13 @@ module BossLady
           next
         end
 
-        traits_array = traits_array[:traits] if traits_array.has_key? :traits
-        traits = traits_array.reject(&:blank?).map(&:to_sym)
+        traits = params[:traits].reject(&:blank?).map(&:to_sym)
         next if invalid_traits?(factory_class, traits)
         factory = factories_for(factory_name, traits)
         check_for_overlapping_attributes(factory_class, factory, traits)
 
-        factory[:instances] << FactoryGirl.create(factory_name, *traits) if valid?
+        attributes = params[:attributes] || {}
+        factory[:instances] << FactoryGirl.create(factory_name, *traits, attributes) if valid?
       end
     end
 

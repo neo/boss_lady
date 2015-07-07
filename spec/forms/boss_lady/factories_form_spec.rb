@@ -2,9 +2,11 @@ require_relative '../../../spec/spec_helper'
 
 module BossLady
   RSpec.describe FactoriesForm do
-    let(:params) { ActiveSupport::HashWithIndifferentAccess.new({'factories' => {factory => {'traits' => traits}}}) }
+    let(:params) { ActiveSupport::HashWithIndifferentAccess.new({'factories' => {factory => {'traits' => traits, 'attributes' => attributes }}}) }
     let(:factory) { 'computer' }
     let(:traits) { [] }
+    let(:attributes) { {} }
+
     subject { FactoriesForm.create params }
 
     context '.create' do
@@ -35,21 +37,29 @@ module BossLady
           end
         end
 
-        it 'creates an instance' do
-          expect(subject).to be_valid
-        end
-
         it 'has the instance available in created_factories' do
           expect(subject.created_factories[factory][:instances].size).to eq 1
         end
+
+        context 'and no attributes' do
+          it 'creates an instance' do
+            expect(subject).to be_valid
+          end
+
+        end
+
+        context 'and with attributes' do
+          let(:attributes) { {storage_size: '2048GB'} }
+          it 'creates an instance and sets the attribute' do
+            expect(subject).to be_valid
+            expect(subject.created_factories[factory][:instances].first.storage_size).to eq('2048GB')
+          end
+        end
+
       end
 
       context 'factory with traits' do
         let(:traits) { %i(without_ssd) }
-
-        it 'creates an instance' do
-          expect(subject).to be_valid
-        end
 
         it 'has the instance available in created_factories' do
           expect(subject.created_factories['computer'][:instances].size).to eq 1
@@ -60,6 +70,35 @@ module BossLady
 
           it 'converts the trait names to symbols' do
             expect(subject.created_factories['computer'][:instances].size).to eq 1
+          end
+        end
+
+        context 'and no attributes' do
+          it 'creates an instance with the given trait' do
+            expect(subject).to be_valid
+            created_object = subject.created_factories[factory][:instances].first
+            expect(created_object.ssd).to eq(false)
+          end
+        end
+
+        context 'and with attributes that are not overlapping' do
+          let(:attributes) { {storage_size: '2048GB'} }
+
+          it 'creates an instance with the given trait and sets the attribute' do
+            expect(subject).to be_valid
+            created_object = subject.created_factories[factory][:instances].first
+            expect(created_object.storage_size).to eq('2048GB')
+            expect(created_object.ssd).to eq(false)
+          end
+        end
+
+        context 'and with attributes that are overlapping' do
+          let(:attributes) { {ssd: true} }
+
+          it 'creates an instance with the given trait and overrides the attribute' do
+            expect(subject).to be_valid
+            created_object = subject.created_factories[factory][:instances].first
+            expect(created_object.ssd).to eq(true)
           end
         end
       end
